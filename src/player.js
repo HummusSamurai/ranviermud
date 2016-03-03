@@ -18,9 +18,9 @@ var Player = function(socket) {
   self.location = null;
   self.locale = null;
   self.prompt_string =
-    '%health_condition <blue>||</blue> %sanity_condition\n<blue><bold>[ </bold></blue>';
+    '%health_condition %sanity_condition\n<blue><bold>[ </bold></blue>';
   self.combat_prompt =
-    "<bold>|| %player_condition <blue>||</blue> %target_condition ||</bold>\r\n>";
+    "<bold>|| %player_condition %target_condition ||</bold>\r\n>";
   self.password = null;
   self.inventory = [];
   self.equipment = {};
@@ -229,7 +229,7 @@ var Player = function(socket) {
   self.write = function(data, color) {
     color = color || true;
     if (!color) ansi.disable();
-    socket.write(ansi.parse(wrapAnsi(data, WRAP_LENGTH));
+    socket.write(ansi.parse(data));
     ansi.enable();
   };
 
@@ -257,7 +257,7 @@ var Player = function(socket) {
   self.say = function(data, color) {
     color = color || true;
     if (!color) ansi.disable();
-    socket.write(ansi.parse(wrapAnsi(data, WRAP_LENGTH) + "\r\n");
+    socket.write(ansi.parse(wrapAnsi(data, WRAP_LENGTH)) + "\r\n");
     ansi.enable();
   };
 
