@@ -3,10 +3,13 @@ var Data = require('./data').Data,
   crypto = require('crypto'),
   ansi = require('sty'),
   util = require('util'),
-  events = require('events');
+  events = require('events'),
+  wrapAnsi = require('wrap-ansi');
 var npcs_scripts_dir = __dirname + '/../scripts/player/';
 var l10n_dir = __dirname + '/../l10n/scripts/player/';
 var statusUtil = require('./status');
+
+var WRAP_LENGTH = 60;
 
 var Player = function(socket) {
   var self = this;
@@ -226,7 +229,7 @@ var Player = function(socket) {
   self.write = function(data, color) {
     color = color || true;
     if (!color) ansi.disable();
-    socket.write(ansi.parse(data));
+    socket.write(ansi.parse(wrapAnsi(data, WRAP_LENGTH));
     ansi.enable();
   };
 
@@ -254,7 +257,7 @@ var Player = function(socket) {
   self.say = function(data, color) {
     color = color || true;
     if (!color) ansi.disable();
-    socket.write(ansi.parse(data) + "\r\n");
+    socket.write(ansi.parse(wrapAnsi(data, WRAP_LENGTH) + "\r\n");
     ansi.enable();
   };
 
