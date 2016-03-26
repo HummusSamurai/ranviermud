@@ -9,15 +9,21 @@ exports.command = function(rooms, items, players, npcs, Commands) {
     player.sayL10n(l10n, 'ATTRIBUTES');
 
     for (var attr in character) {
-      if (attr.indexOf('max') === -1 && attr !== 'experience') {
+      if (attrIsVisible(attr)) {
         player.sayL10n(l10n, attr.toUpperCase(), getStatusString(attr,
           character[attr], character));
       }
     }
 
+    function attrIsVisible(attr) {
+      return attr.indexOf('max') === -1 && attr !== 'experience' && character[attr];
+    }
+
     function getStatusString(attr, value, character) {
+
       var maxHealth = character.max_health;
       var maxSanity = character.max_sanity;
+
       var status = {
         level: getLevelText,
         health: statusUtil.getHealthText(maxHealth, player, null, true),
@@ -27,10 +33,7 @@ exports.command = function(rooms, items, players, npcs, Commands) {
         willpower: getWillpower,
         quickness: getQuickness,
         cleverness: getCleverness,
-        mutagens: function() {
-          return value === 1 ? value + ' more time' : value +
-            ' more times';
-        },
+        mutagens: getMutagens,
         description: player.getDescription,
       };
       return status[attr](value) || '';
@@ -118,6 +121,11 @@ exports.command = function(rooms, items, players, npcs, Commands) {
       };
       var attrStr = 'will is ';
       return evalStatus(willpower, status, attrStr, 'divine', 'bold');
+    }
+
+    function getMutagens(mut) {
+      return mut === 1 ?
+        mut + ' more time' : mut + ' more times';
     }
 
     // Helper functions
